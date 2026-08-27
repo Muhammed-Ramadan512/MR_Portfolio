@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class ProjectTitle extends StatelessWidget {
   const ProjectTitle({
-    Key key,
-    @required this.projectTitle,
+    Key? key,
+    required this.projectTitle,
   }) : super(key: key);
 
   final String projectTitle;
@@ -12,8 +12,12 @@ class ProjectTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       projectTitle,
-      style: TextStyle(
-          color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
+      style: const TextStyle(
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+        fontSize: 22,
+        letterSpacing: 0.5,
+      ),
     );
   }
 }

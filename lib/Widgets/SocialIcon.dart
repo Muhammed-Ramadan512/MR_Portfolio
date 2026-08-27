@@ -1,40 +1,64 @@
 import 'package:flutter/material.dart';
+import '../constants.dart';
 
 class SocialIcon extends StatefulWidget {
-  SocialIcon({this.icon, this.onTap});
+  const SocialIcon({
+    Key? key,
+    required this.icon,
+    required this.onTap,
+  }) : super(key: key);
+
   final IconData icon;
-  final Function onTap;
+  final VoidCallback onTap;
+
   @override
-  _SocialIconState createState() => _SocialIconState();
+  State<SocialIcon> createState() => _SocialIconState();
 }
 
 class _SocialIconState extends State<SocialIcon> {
-  Color hoverColor = Colors.transparent;
+  bool _isHovered = false;
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: widget.onTap,
-      onHover: (x) {
-        setState(() {
-          hoverColor = x ? Color(0xff00B0DC) : Colors.transparent;
-        });
-      },
-      focusColor: Colors.red,
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 7),
-        decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.white12,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: MouseRegion(
+        onEnter: (_) => setState(() => _isHovered = true),
+        onExit: (_) => setState(() => _isHovered = false),
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          onTap: widget.onTap,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: _isHovered
+                  ? kprimaryColor.withValues(alpha: 0.25)
+                  : Colors.white.withValues(alpha: 0.06),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: _isHovered
+                    ? kprimaryColor
+                    : Colors.white.withValues(alpha: 0.15),
+                width: 1.5,
+              ),
+              boxShadow: _isHovered
+                  ? [
+                      BoxShadow(
+                        color: kprimaryColor.withValues(alpha: 0.4),
+                        blurRadius: 12,
+                        spreadRadius: 1,
+                      )
+                    ]
+                  : [],
             ),
-            color: hoverColor),
-        padding: EdgeInsets.all(7),
-        child: Center(
             child: Icon(
-          widget.icon,
-          color: Colors.white,
-          size: 22,
-        )),
+              widget.icon,
+              color: _isHovered ? kprimaryColor : Colors.white,
+              size: 20,
+            ),
+          ),
+        ),
       ),
     );
   }

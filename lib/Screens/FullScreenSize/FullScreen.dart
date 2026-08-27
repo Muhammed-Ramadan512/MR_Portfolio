@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
 import '../../Widgets/HireMeSection.dart';
-
-import './FullAboutSection/FullAbout.dart';
-import './FullApparSection/AppBarContent.dart';
-import './FullPortifiloSection/FullProtofilo.dart';
-import './FullServicesSection/FullServices.dart';
+import 'FullAboutSection/FullAbout.dart';
+import 'FullApparSection/AppBarContent.dart';
 import 'FullContactSection/FullContact.dart';
+import 'FullPortifiloSection/FullProtofilo.dart';
+import 'FullServicesSection/FullServices.dart';
 
-class FullScreen extends StatefulWidget {
-  @override
-  _FullScreenState createState() => _FullScreenState();
-}
+class FullScreen extends StatelessWidget {
+  const FullScreen({Key? key}) : super(key: key);
 
-class _FullScreenState extends State<FullScreen> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
+      children: const [
         AppBarContnet(),
         About(),
         FullServices(),

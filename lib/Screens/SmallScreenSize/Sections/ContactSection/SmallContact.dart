@@ -1,92 +1,99 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mr_portofilo/Provider/AllProvider.dart';
-import 'package:mr_portofilo/Screens/FullScreenSize/FullContactSection/FullContact.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../Provider/AllProvider.dart';
 import '../../../../constants.dart';
+import '../../../FullScreenSize/FullContactSection/FullContact.dart';
 
 class SmallContact extends StatelessWidget {
+  const SmallContact({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
     final allProvider = Provider.of<AllProvider>(context);
 
-    return Stack(children: [
-      Container(
-        height: height * 1.3,
-        color: Colors.black.withOpacity(.9),
-      ),
-      Container(
-        height: height * 1.3,
-        child: Center(
-          child: SingleChildScrollView(
-            physics: NeverScrollableScrollPhysics(),
+    return Container(
+      width: double.infinity,
+      color: const Color(0xff090c14),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 45, horizontal: 20),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(
-                  height: 25,
-                ),
-                Text.rich(
+                const Text.rich(
                   TextSpan(
-                      style: Theme.of(context).textTheme.headline3.copyWith(
-                          fontWeight: FontWeight.bold, color: Colors.black),
-                      children: [
-                        TextSpan(
-                            text: "Get In ",
-                            style: TextStyle(color: Colors.amber)),
-                        TextSpan(
-                            text: "Touch",
-                            style: TextStyle(color: kprimaryColor))
-                      ]),
+                    style: TextStyle(
+                      fontFamily: "Zona",
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.5,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: "Get In ",
+                        style: TextStyle(color: Colors.amber),
+                      ),
+                      TextSpan(
+                        text: "Touch",
+                        style: TextStyle(color: kprimaryColor),
+                      ),
+                    ],
+                  ),
                 ),
-                SizedBox(
-                  height: 40,
+                const SizedBox(height: 10),
+                const Text(
+                  "Feel free to reach out anytime!",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white60,
+                    fontSize: 14,
+                  ),
                 ),
+                const SizedBox(height: 35),
                 Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  child: Wrap(
+                    spacing: 16,
+                    runSpacing: 16,
+                    alignment: WrapAlignment.center,
                     children: [
                       ContactElemet(
-                        onTap: () {
-                          allProvider.linkedIn();
-                        },
-                        title: 'Linkedin',
+                        onTap: () => allProvider.linkedIn(),
+                        title: 'LinkedIn',
+                        subtitle: '/in/mohamed-ramadan512',
                         icon: FontAwesomeIcons.linkedinIn,
                       ),
                       ContactElemet(
-                        onTap: () {
-                          allProvider.fb();
-                        },
-                        title: 'FaceBook',
+                        onTap: () => allProvider.gitHub(),
+                        title: 'GitHub',
+                        subtitle: '/Muhammed-Ramadan512',
+                        icon: FontAwesomeIcons.github,
+                      ),
+                      ContactElemet(
+                        onTap: () => allProvider.email(),
+                        title: 'Email',
+                        subtitle: 'mohamedRamadan949@gmail.com',
+                        icon: FontAwesomeIcons.envelope,
+                      ),
+                      ContactElemet(
+                        onTap: () => allProvider.phone(),
+                        title: 'Phone',
+                        subtitle: '+20 01013691369',
+                        icon: FontAwesomeIcons.phone,
+                      ),
+                      ContactElemet(
+                        onTap: () => allProvider.fb(),
+                        title: 'Facebook',
+                        subtitle: '/mohmed.ramadan.75',
                         icon: FontAwesomeIcons.facebookF,
                       ),
                       ContactElemet(
-                        onTap: () {},
-                        title: 'mohamedramadan949@gmail.com',
-                        icon: FontAwesomeIcons.mailBulk,
-                      ),
-                      ContactElemet(
-                        onTap: () {
-                          allProvider.insat();
-                        },
-                        title: 'Instagram',
-                        icon: FontAwesomeIcons.instagram,
-                      ),
-                      ContactElemet(
-                        onTap: () {},
-                        title: '+2 01013691369',
-                        icon: FontAwesomeIcons.phoneAlt,
-                      ),
-                      ContactElemet(
-                        onTap: () {
-                          allProvider.gitHub();
-                        },
-                        title: 'Github',
-                        icon: FontAwesomeIcons.github,
+                        onTap: () => allProvider.portfolio(),
+                        title: 'Live Portfolio',
+                        subtitle: 'mr-portofolio.web.app',
+                        icon: FontAwesomeIcons.globe,
                       ),
                     ],
                   ),
@@ -94,8 +101,53 @@ class SmallContact extends StatelessWidget {
               ],
             ),
           ),
-        ),
-      )
-    ]);
+          const SizedBox(height: 20),
+
+          // Footer
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            decoration: BoxDecoration(
+              color: const Color(0xff06080e),
+              border: Border(
+                top: BorderSide(
+                  color: Colors.white.withValues(alpha: 0.06),
+                ),
+              ),
+            ),
+            child: Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text(
+                    'Built with Flutter & ',
+                    style: TextStyle(color: Colors.white70, fontSize: 13),
+                  ),
+                  Icon(
+                    Icons.favorite,
+                    color: Colors.redAccent,
+                    size: 14,
+                  ),
+                  Text(
+                    ' by ',
+                    style: TextStyle(color: Colors.white70, fontSize: 13),
+                  ),
+                  Text(
+                    'Mohamed Ramadan',
+                    style: TextStyle(
+                      color: kprimaryColor,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: "Zona",
+                      letterSpacing: 1,
+                      fontSize: 13,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
+    );
   }
 }

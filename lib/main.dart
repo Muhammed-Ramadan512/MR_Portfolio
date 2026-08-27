@@ -1,36 +1,46 @@
 import 'package:flutter/material.dart';
-import 'package:mr_portofilo/Provider/Projects.dart';
-import 'package:mr_portofilo/Screens/SplashScreen.dart';
-import './Screens/HomeScreen/HomScreen.dart';
 import 'package:provider/provider.dart';
-
-import './Provider/AllProvider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-//import './Screens/SplashScreen.dart';
+
+import 'Provider/AllProvider.dart';
+import 'Provider/Projects.dart';
+import 'Screens/SplashScreen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   ResponsiveSizingConfig.instance.setCustomBreakpoints(
-    ScreenBreakpoints(desktop: 830, tablet: 830, watch: 200),
+    const ScreenBreakpoints(desktop: 900, tablet: 900, watch: 200),
   );
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(value: AllProvider()),
-        ChangeNotifierProvider.value(value: AllProjects())
+        ChangeNotifierProvider(create: (_) => AllProvider()),
+        ChangeNotifierProvider(create: (_) => AllProjects()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Mr Protofilo',
+        title: 'MR Portfolio - Mohamed Ramadan',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          useMaterial3: true,
+          brightness: Brightness.dark,
+          scaffoldBackgroundColor: const Color(0xff0b0f19),
+          primaryColor: const Color(0xff00B0DC),
+          colorScheme: const ColorScheme.dark(
+            primary: Color(0xff00B0DC),
+            secondary: Colors.amber,
+            surface: Color(0xff161f30),
+          ),
+          fontFamily: 'Zona',
         ),
-        home: SplashScreen(), //MyHomePage(),
+        home: const SplashScreen(),
       ),
     );
   }

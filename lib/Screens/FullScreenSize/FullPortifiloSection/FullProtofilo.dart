@@ -1,24 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_page_view_indicator/flutter_page_view_indicator.dart';
-import 'package:mr_portofilo/Provider/AllProvider.dart';
-import 'package:mr_portofilo/Provider/Projects.dart';
-import 'package:mr_portofilo/Screens/FullScreenSize/FullPortifiloSection/components/PortofiloBG.dart';
 import 'package:provider/provider.dart';
 
+import '../../../Provider/AllProvider.dart';
+import '../../../Provider/Projects.dart';
+import '../../../Widgets/CustomPageIndicator.dart';
 import '../../../constants.dart';
+import 'components/PortofiloBG.dart';
+import 'components/PortofiloTitle.dart';
 import 'components/projectLabel.dart';
 import 'components/projectSubtitle.dart';
-import 'components/PortofiloTitle.dart';
 import 'components/projectTitle.dart';
 
 class FullProtofilo extends StatefulWidget {
+  const FullProtofilo({Key? key}) : super(key: key);
+
   @override
-  _FullProtofiloState createState() => _FullProtofiloState();
+  State<FullProtofilo> createState() => _FullProtofiloState();
 }
 
 class _FullProtofiloState extends State<FullProtofilo> {
-  List pindex = [];
-  ScrollController controller;
+  List<int> pindex = [];
+  late ScrollController controller;
+  bool isinit = true;
+  double scroolIndex = 0;
+
   @override
   void initState() {
     controller = ScrollController();
@@ -31,26 +36,15 @@ class _FullProtofiloState extends State<FullProtofilo> {
     super.dispose();
   }
 
-  bool isinit = true;
-
-  double scroolIndex = 0;
-  int indexOfShowMore;
   @override
   void didChangeDependencies() {
     if (isinit) {
       final allProjects = Provider.of<AllProjects>(context);
-
       pindex = List.generate(allProjects.allProjects.length, (index) => 0);
-    }
-    setState(() {
       isinit = false;
-    });
-
+    }
     super.didChangeDependencies();
   }
-
-  Color seeMore = Colors.amber;
-  Color seeMoreText = Colors.black;
 
   @override
   Widget build(BuildContext context) {
@@ -59,281 +53,243 @@ class _FullProtofiloState extends State<FullProtofilo> {
     final allProjects = Provider.of<AllProjects>(context);
     final allProvider = Provider.of<AllProvider>(context);
 
-    return Stack(
-      children: [
-        BgImage(height: height, width: width),
-        Container(
-            padding: EdgeInsets.symmetric(vertical: 15),
-            height: height * 1.3,
-            width: double.infinity,
-            child: SingleChildScrollView(
-              //physics: NeverScrollableScrollPhysics(),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 40,
-                  ),
-                  PortofiloTitle(),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        splashColor: kprimaryColor,
-                        color: Colors.amber,
-                        icon: Icon(
-                          Icons.arrow_back,
-                        ),
-                        hoverColor: Colors.white,
-                        onPressed: () {
-                          if (!controller.position.atEdge) {
-                            setState(() {
-                              scroolIndex = scroolIndex + 250;
-                            });
-                          } else {
-                            setState(() {
-                              scroolIndex = controller.position.maxScrollExtent;
-                            });
-                          }
+    return Container(
+      width: double.infinity,
+      color: const Color(0xff0b0f19),
+      child: Stack(
+        children: [
+          BgImage(height: height, width: width),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 20),
+            child: Column(
+              children: [
+                const PortofiloTitle(),
+                const SizedBox(height: 35),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // Previous Button
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                      color: Colors.amber,
+                      iconSize: 32,
+                      hoverColor: Colors.white10,
+                      onPressed: () {
+                        if (controller.hasClients) {
+                          final target = (controller.offset - 420).clamp(
+                              0.0, controller.position.maxScrollExtent);
+                          controller.animateTo(
+                            target,
+                            curve: Curves.easeInOutCubic,
+                            duration: const Duration(milliseconds: 500),
+                          );
+                        }
+                      },
+                    ),
+                    const SizedBox(width: 10),
 
-                          controller.animateTo(scroolIndex.toDouble(),
-                              curve: Curves.fastOutSlowIn,
-                              duration: Duration(seconds: 1));
-                        },
-                        iconSize: 50,
+                    // Projects List View
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxWidth: width > 1200 ? 1000 : (width - 150),
+                        maxHeight: 600,
                       ),
-                      Expanded(
-                        child: Container(
-                          height: 700,
-                          child: Center(
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              controller: controller,
-                              child: Center(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    ...List.generate(
-                                        allProjects.allProjects.length,
-                                        (pIndex) {
-                                      //pindex = List.generate(4, (index) => 0);
-                                      return Card(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(40)),
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: 70),
-                                        elevation: 7,
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(40),
-                                          child: Container(
-                                            width: 400,
-                                            height: 550,
-                                            child: Column(
-                                              children: [
-                                                Container(
-                                                  width: double.infinity,
-                                                  height: 340,
-                                                  child: PageView.builder(
-                                                    onPageChanged: (i) {
-                                                      setState(() {
-                                                        pindex[pIndex] = i;
-                                                      });
-                                                    },
-                                                    itemCount: allProjects
-                                                        .allProjects[pIndex]
-                                                        .images
-                                                        .length,
-                                                    itemBuilder:
-                                                        (context, index) =>
-                                                            Container(
-                                                      color: Color(0xff3D3D3D)
-                                                          .withOpacity(
-                                                              .5), //Colors.transparent,
-                                                      child: Image.asset(
-                                                        allProjects
-                                                            .allProjects[pIndex]
-                                                            .images[index],
-                                                        fit: BoxFit.fill,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                PageViewIndicator(
-                                                  length: allProjects
-                                                      .allProjects[pIndex]
-                                                      .images
-                                                      .length,
-                                                  currentIndex: pindex[pIndex],
-                                                  currentItemColor:
-                                                      Colors.amber,
-                                                  otherItemColor: Colors
-                                                      .black, //Colors.grey.shade800,
-                                                  currentItemWidth: 15,
-                                                  currentItemHeight: 15,
-                                                  otherItemWidth: 15,
-                                                  otherItemHeight: 15,
-                                                  indicatorMargin:
-                                                      EdgeInsets.all(5),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          9999),
-                                                  alignment:
-                                                      MainAxisAlignment.center,
-                                                  animationDuration: Duration(
-                                                      milliseconds: 50),
-                                                ),
-                                                SizedBox(
-                                                  height: 15,
-                                                ),
-                                                Expanded(
-                                                  child: Container(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 15,
-                                                            vertical: 15),
-                                                    width: double.infinity,
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceAround,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        ProjectTitle(
-                                                            projectTitle:
-                                                                allProjects
-                                                                    .allProjects[
-                                                                        pIndex]
-                                                                    .tilte),
-                                                        ProjectSubtitle(
-                                                            projectSubTitle:
-                                                                allProjects
-                                                                    .allProjects[
-                                                                        pIndex]
-                                                                    .subTitle),
-                                                        Row(
-                                                          children: [
-                                                            Expanded(
-                                                              child:
-                                                                  SingleChildScrollView(
-                                                                scrollDirection:
-                                                                    Axis.horizontal,
-                                                                child: Row(
-                                                                    children: [
-                                                                      ...List.generate(
-                                                                          allProjects
-                                                                              .allProjects[
-                                                                                  pIndex]
-                                                                              .labels
-                                                                              .length,
-                                                                          (labelIndex) =>
-                                                                              ProjectLables(labelName: allProjects.allProjects[pIndex].labels[labelIndex]))
-                                                                    ]),
-                                                              ),
-                                                            ),
-                                                            InkWell(
-                                                              onHover: (i) {
-                                                                if (i == true) {
-                                                                  setState(() {
-                                                                    indexOfShowMore =
-                                                                        pIndex;
-                                                                    seeMore =
-                                                                        Colors
-                                                                            .black;
-                                                                    seeMoreText =
-                                                                        Colors
-                                                                            .amber;
-                                                                  });
-                                                                } else {
-                                                                  setState(() {
-                                                                    indexOfShowMore =
-                                                                        null;
-                                                                    seeMore =
-                                                                        Colors
-                                                                            .amber;
-                                                                    seeMoreText =
-                                                                        Colors
-                                                                            .black;
-                                                                  });
-                                                                }
-                                                              },
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          20),
-                                                              onTap: () {
-                                                                allProvider.projects(
-                                                                    url: allProjects
-                                                                        .allProjects[
-                                                                            pIndex]
-                                                                        .link);
-                                                              },
-                                                              child: ProjectLables(
-                                                                  projectIndex:
-                                                                      pIndex,
-                                                                  showMoreindex:
-                                                                      indexOfShowMore,
-                                                                  labelName:
-                                                                      "See More",
-                                                                  color:
-                                                                      seeMore,
-                                                                  textColor:
-                                                                      seeMoreText),
-                                                            )
-                                                          ],
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    }),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        controller: controller,
+                        child: Row(
+                          children: List.generate(
+                            allProjects.allProjects.length,
+                            (pIndex) {
+                              final project = allProjects.allProjects[pIndex];
+
+                              return Container(
+                                width: 380,
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 10),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xff161f30),
+                                  borderRadius: BorderRadius.circular(24),
+                                  border: Border.all(
+                                    color: Colors.white.withValues(alpha: 0.08),
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withValues(alpha: 0.4),
+                                      blurRadius: 18,
+                                      offset: const Offset(0, 8),
+                                    ),
                                   ],
                                 ),
-                              ),
-                            ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(24),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      // Image Carousel
+                                      SizedBox(
+                                        height: 250,
+                                        width: double.infinity,
+                                        child: Stack(
+                                          children: [
+                                            PageView.builder(
+                                              onPageChanged: (i) {
+                                                setState(() {
+                                                  pindex[pIndex] = i;
+                                                });
+                                              },
+                                              itemCount: project.images.length,
+                                              itemBuilder: (context, index) =>
+                                                  Container(
+                                                color: const Color(0xff0e1524),
+                                                child: Image.asset(
+                                                  project.images[index],
+                                                  fit: BoxFit.contain,
+                                                ),
+                                              ),
+                                            ),
+                                            Positioned(
+                                              bottom: 12,
+                                              left: 0,
+                                              right: 0,
+                                              child: CustomPageIndicator(
+                                                length: project.images.length,
+                                                currentIndex:
+                                                    pindex.length > pIndex
+                                                        ? pindex[pIndex]
+                                                        : 0,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+
+                                      // Project Content Info
+                                      Padding(
+                                        padding: const EdgeInsets.all(20),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            ProjectTitle(
+                                                projectTitle: project.tilte),
+                                            const SizedBox(height: 10),
+                                            ProjectSubtitle(
+                                                projectSubTitle:
+                                                    project.subTitle),
+                                            const SizedBox(height: 18),
+                                            SingleChildScrollView(
+                                              scrollDirection: Axis.horizontal,
+                                              child: Row(
+                                                children: List.generate(
+                                                  project.labels.length,
+                                                  (labelIndex) => ProjectLables(
+                                                    labelName: project
+                                                        .labels[labelIndex],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(height: 18),
+                                            Wrap(
+                                              spacing: 8,
+                                              runSpacing: 8,
+                                              children: [
+                                                if (project.playStoreLink != null)
+                                                  _buildStoreBtn(
+                                                    label: "Google Play ↗",
+                                                    url: project.playStoreLink!,
+                                                    color: const Color(0xff10b981),
+                                                    onTap: () => allProvider.projects(url: project.playStoreLink!),
+                                                  ),
+                                                if (project.appStoreLink != null)
+                                                  _buildStoreBtn(
+                                                    label: "App Store ↗",
+                                                    url: project.appStoreLink!,
+                                                    color: kprimaryColor,
+                                                    onTap: () => allProvider.projects(url: project.appStoreLink!),
+                                                  ),
+                                                if (project.playStoreLink == null && project.appStoreLink == null && project.link.isNotEmpty)
+                                                  _buildStoreBtn(
+                                                    label: "View Project ↗",
+                                                    url: project.link,
+                                                    color: Colors.amber,
+                                                    onTap: () => allProvider.projects(url: project.link),
+                                                  ),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                         ),
                       ),
-                      IconButton(
-                        onPressed: () {
-                          if (scroolIndex > 400) {
-                            setState(() {
-                              scroolIndex = scroolIndex - 400;
-                            });
-                          } else {
-                            setState(() {
-                              scroolIndex = 0;
-                            });
-                          }
+                    ),
+                    const SizedBox(width: 10),
 
-                          controller.animateTo(scroolIndex.toDouble(),
-                              curve: Curves.fastOutSlowIn,
-                              duration: Duration(seconds: 1));
-                        },
-                        splashColor: kprimaryColor,
-                        color: Colors.amber,
-                        icon: Icon(
-                          Icons.arrow_forward,
-                        ),
-                        hoverColor: Colors.white,
-                        iconSize: 50,
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            )),
-      ],
+                    // Next Button
+                    IconButton(
+                      icon: const Icon(Icons.arrow_forward_ios_rounded),
+                      color: Colors.amber,
+                      iconSize: 32,
+                      hoverColor: Colors.white10,
+                      onPressed: () {
+                        if (controller.hasClients) {
+                          final target = (controller.offset + 420).clamp(
+                              0.0, controller.position.maxScrollExtent);
+                          controller.animateTo(
+                            target,
+                            curve: Curves.easeInOutCubic,
+                            duration: const Duration(milliseconds: 500),
+                          );
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStoreBtn({
+    required String label,
+    required String url,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.15),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: color, width: 1.2),
+          ),
+          child: Text(
+            label,
+            style: TextStyle(
+              color: color,
+              fontWeight: FontWeight.bold,
+              fontSize: 12,
+              letterSpacing: 0.4,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

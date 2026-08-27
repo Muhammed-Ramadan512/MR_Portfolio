@@ -1,15 +1,13 @@
-import 'package:flutter/cupertino.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AllProvider extends ChangeNotifier {
   bool menu = false;
-
   double myScrool = 0.0;
-  ScrollController controller;
-  // Color appBarMenuItemColor = Colors.white;
+  ScrollController controller = ScrollController();
 
   void setController() {
+    controller.dispose();
     controller = ScrollController();
     controller.addListener(() {
       myScrool = controller.offset;
@@ -17,164 +15,86 @@ class AllProvider extends ChangeNotifier {
     });
   }
 
-  void animateTo(var scrollIndex) {
-    controller.animateTo(scrollIndex,
-        curve: Curves.fastOutSlowIn, duration: Duration(milliseconds: 700));
+  void animateTo(double scrollIndex) {
+    if (controller.hasClients) {
+      controller.animateTo(
+        scrollIndex,
+        curve: Curves.easeInOutCubic,
+        duration: const Duration(milliseconds: 700),
+      );
+    }
   }
 
-  void animate({int index, var height}) {
+  void animate({required int index, required double height}) {
     switch (index) {
       case 0:
         animateTo(0);
         break;
       case 1:
-        animateTo(1 * height - 95);
+        animateTo(height - 80);
         break;
       case 2:
-        animateTo(2 * height - 95);
+        animateTo(height * 2 - 80);
         break;
       case 3:
-        animateTo(3 * height + height * .3 + 300 - 95);
+        animateTo(height * 3 + height * 0.3 + 200 - 80);
         break;
       case 4:
-        animateTo(4 * height + height * .6 + 300 - 95);
+        animateTo(height * 4 + height * 0.6 + 300 - 80);
         break;
     }
   }
 
-  void animateSmall({int index, var height}) {
+  void animateSmall({required int index, required double height}) {
     switch (index) {
       case 0:
         animateTo(0);
         break;
       case 1:
-        animateTo(1 * height - 95);
+        animateTo(height - 80);
         break;
       case 2:
-        animateTo(height - 95 + height * 1.5);
+        animateTo(height * 2.5 - 80);
         break;
       case 3:
-        animateTo(height * 1.5 + height - 95 + height * 1.2 + 300);
+        animateTo(height * 3.7 + 200);
         break;
       case 4:
-        animateTo(height * 1.5 + height + height * 1.2 + height * 1.3 + 300);
+        animateTo(height * 5.0 + 300);
         break;
     }
   }
 
-  bool dynamicHover({
-    int index,
-    var height,
-  }) {
+  bool dynamicHover({required int index, required double height}) {
     switch (index) {
       case 0:
-        if (myScrool < height - 95) {
-          return true;
-        } else {
-          return false;
-        }
-
-        break;
+        return myScrool < height - 80;
       case 1:
-        if (myScrool >= height - 95 && myScrool < height + height - 95) {
-          return true;
-        } else {
-          return false;
-        }
-        break;
+        return myScrool >= height - 80 && myScrool < height * 2 - 80;
       case 2:
-        if (myScrool >= height + height - 95 &&
-            myScrool < height + height - 95 + height * 1.3 + 300) {
-          return true;
-        } else {
-          return false;
-        }
-
-        break;
+        return myScrool >= height * 2 - 80 &&
+            myScrool < height * 3 + height * 0.3 + 200 - 80;
       case 3:
-        if (myScrool >= height + height - 95 + height * 1.3 + 300 &&
-            myScrool <
-                height + height - 95 + height * 1.3 + 300 + height * 1.3) {
-          return true;
-        } else {
-          return false;
-        }
-
-        break;
+        return myScrool >= height * 3 + height * 0.3 + 200 - 80 &&
+            myScrool < height * 4 + height * 0.6 + 200 - 80;
       case 4:
-        if (myScrool >=
-                height - 95 + height + height * 1.3 + height * 1.3 + 300 &&
-            myScrool <
-                height -
-                    95 +
-                    height +
-                    height * 1.3 +
-                    height * 1.3 +
-                    300 +
-                    height) {
-          return true;
-        } else {
-          return false;
-        }
-
-        break;
+        return myScrool >= height * 4 + height * 0.6 + 200 - 80;
     }
     return false;
   }
 
-  bool dynamicSmallHover({
-    int index,
-    var height,
-  }) {
+  bool dynamicSmallHover({required int index, required double height}) {
     switch (index) {
       case 0:
-        if (myScrool < height - 95) {
-          return true;
-        } else {
-          return false;
-        }
-
-        break;
+        return myScrool < height - 80;
       case 1:
-        if (myScrool >= height - 95 && myScrool < height * 1.5 + height - 95) {
-          return true;
-        } else {
-          return false;
-        }
-        break;
+        return myScrool >= height - 80 && myScrool < height * 2.5 - 80;
       case 2:
-        if (myScrool >= height * 1.5 + height - 95 &&
-            myScrool < height * 1.5 + height - 90 + height * 1.2) {
-          return true;
-        } else {
-          return false;
-        }
-
-        break;
+        return myScrool >= height * 2.5 - 80 && myScrool < height * 3.7 + 200;
       case 3:
-        if (myScrool >= height * 1.5 + height - 95 + height * 1.2 &&
-            myScrool <
-                height * 1.5 +
-                    height -
-                    95 +
-                    height * 1.2 +
-                    300 +
-                    height * 1.3) {
-          return true;
-        } else {
-          return false;
-        }
-
-        break;
+        return myScrool >= height * 3.7 + 200 && myScrool < height * 5.0 + 300;
       case 4:
-        if (myScrool >=
-            height * 1.5 + height - 95 + height * 1.2 + 300 + height * 1.3) {
-          return true;
-        } else {
-          return false;
-        }
-
-        break;
+        return myScrool >= height * 5.0 + 300;
     }
     return false;
   }
@@ -183,11 +103,8 @@ class AllProvider extends ChangeNotifier {
     controller.dispose();
   }
 
-  void getControllerOffset({double offset}) {
-    if (offset != null) {
-      myScrool = offset;
-    }
-
+  void getControllerOffset({required double offset}) {
+    myScrool = offset;
     notifyListeners();
   }
 
@@ -196,96 +113,59 @@ class AllProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void fb() async {
-    String url = "https://www.facebook.com/mohmed.ramadan.75";
-
+  Future<void> _launch(String urlString) async {
+    final uri = Uri.parse(urlString);
     try {
-      bool launched =
-          await launch(url, enableJavaScript: true, forceSafariVC: false);
-      if (!launched) {
-        await launch(url, forceSafariVC: false);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.platformDefault);
+      } else {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
       }
     } catch (e) {
-      print(e);
+      debugPrint('Could not launch $urlString: $e');
     }
   }
 
-  void projects({String url}) async {
-    if (url == null) {
-      return;
-    } else {}
-    //String url = "https://play.google.com/store/apps/details?id=com.Mr.MyPet";
+  void fb() {
+    _launch("https://www.facebook.com/mohamed.ramadan.589297");
+  }
 
-    try {
-      bool launched =
-          await launch(url, enableJavaScript: true, forceSafariVC: false);
-      if (!launched) {
-        await launch(url, forceSafariVC: false);
-      }
-    } catch (e) {
-      print(e);
+  void projects({required String url}) {
+    if (url.isNotEmpty) {
+      _launch(url);
     }
   }
 
-  void linkedIn() async {
-    String url = "https://www.linkedin.com/in/mohamed-ramadan512/";
-
-    try {
-      bool launched =
-          await launch(url, enableJavaScript: true, forceSafariVC: false);
-      if (!launched) {
-        await launch(url, forceSafariVC: false);
-      }
-    } catch (e) {
-      print(e);
-    }
+  void linkedIn() {
+    _launch("https://www.linkedin.com/in/mohamed-ramadan512/");
   }
 
-  void gitHub() async {
-    String url = "https://github.com/Muhammed-Ramadan512";
-
-    try {
-      bool launched =
-          await launch(url, enableJavaScript: true, forceSafariVC: false);
-      if (!launched) {
-        await launch(url, forceSafariVC: false);
-      }
-    } catch (e) {
-      print(e);
-    }
+  void gitHub() {
+    _launch("https://github.com/Muhammed-Ramadan512");
   }
 
-  void insat() async {
-    String url = "https://www.instagram.com/mohamed_ramadan512/?hl=en";
-
-    try {
-      bool launched =
-          await launch(url, enableJavaScript: true, forceSafariVC: false);
-      if (!launched) {
-        await launch(url, forceSafariVC: false);
-      }
-    } catch (e) {
-      print(e);
-    }
+  void insat() {
+    _launch("https://www.instagram.com/mohamed_ramadan512/?hl=en");
   }
 
-  void downloadCv() async {
-    String fbProtocolUrl;
+  void instagram() {
+    _launch("https://www.instagram.com/mohamed_ramadan512/?hl=en");
+  }
 
-    fbProtocolUrl =
-        "https://drive.google.com/uc?id=1a6oT4U_Xvt0RmaOtbtFW7xqg6k9rCi3r&export=download"; //'fb://page/100033591952970';
+  void email() {
+    _launch("mailto:mohamedramadan949@gmail.com");
+  }
 
-    String fallbackUrl =
-        'https://drive.google.com/uc?id=1a6oT4U_Xvt0RmaOtbtFW7xqg6k9rCi3r&export=download';
+  void phone() {
+    _launch("tel:+201013691369");
+  }
 
-    try {
-      bool launched = await launch(fbProtocolUrl, forceSafariVC: false);
+  void portfolio() {
+    _launch("https://mr-portofolio.web.app/#/");
+  }
 
-      if (!launched) {
-        await launch(fallbackUrl, forceSafariVC: false);
-      }
-    } catch (e) {
-      await launch(fallbackUrl, forceSafariVC: false);
-    }
+  void downloadCv() {
+    _launch(
+        "https://drive.google.com/uc?id=1a6oT4U_Xvt0RmaOtbtFW7xqg6k9rCi3r&export=download");
   }
 }

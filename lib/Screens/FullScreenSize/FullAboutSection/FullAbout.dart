@@ -1,36 +1,33 @@
 import 'package:flutter/material.dart';
-
-import './image.dart';
-
-import './Info.dart';
+import 'Info.dart';
+import 'image.dart';
 
 class About extends StatelessWidget {
+  const About({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final height = MediaQuery.of(context).size.height;
 
-        //margin: EdgeInsets.symmetric(horizontal: width * .005),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.white),
+    return Container(
+      constraints: BoxConstraints(minHeight: height),
+      width: double.infinity,
+      color: const Color(0xff0b0f19),
+      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 60),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1200),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: const [
+              AboutImage(),
+              SizedBox(width: 50),
+              AboutInfo(),
+            ],
+          ),
         ),
-        height: MediaQuery.of(context).size.height,
-        width: double.infinity,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            AboutImage(),
-            SizedBox(
-              width: 30,
-            ),
-            AboutInfo(),
-            SizedBox(
-              width: 10,
-            ),
-            // SizedBox(
-            //   width: width * .05,
-            // ),
-          ],
-        ));
+      ),
+    );
   }
 }

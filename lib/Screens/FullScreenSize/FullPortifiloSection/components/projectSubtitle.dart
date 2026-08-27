@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class ProjectSubtitle extends StatelessWidget {
   const ProjectSubtitle({
-    Key key,
-    @required this.projectSubTitle,
+    Key? key,
+    required this.projectSubTitle,
   }) : super(key: key);
 
   final String projectSubTitle;
@@ -14,7 +14,12 @@ class ProjectSubtitle extends StatelessWidget {
       projectSubTitle,
       maxLines: 3,
       overflow: TextOverflow.ellipsis,
-      style: TextStyle(fontWeight: FontWeight.w500),
+      style: const TextStyle(
+        fontWeight: FontWeight.normal,
+        fontSize: 14,
+        color: Colors.white70,
+        height: 1.5,
+      ),
     );
   }
 }

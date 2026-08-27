@@ -1,192 +1,260 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mr_portofilo/Provider/AllProvider.dart';
 import 'package:provider/provider.dart';
 
+import '../../../Provider/AllProvider.dart';
 import '../../../constants.dart';
 
-class FullContact extends StatefulWidget {
-  @override
-  _FullContactState createState() => _FullContactState();
-}
+class FullContact extends StatelessWidget {
+  const FullContact({Key? key}) : super(key: key);
 
-class _FullContactState extends State<FullContact> {
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
     final allProvider = Provider.of<AllProvider>(context);
 
-    return Stack(children: [
-      Container(
-        height: height,
-        color: Colors.black.withOpacity(.9),
-      ),
-      SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 35,
+    return Container(
+      width: double.infinity,
+      color: const Color(0xff090c14),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 30),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text.rich(
+                  TextSpan(
+                    style: TextStyle(
+                      fontFamily: "Zona",
+                      fontSize: 34,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.5,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: "Get In ",
+                        style: TextStyle(color: Colors.amber),
+                      ),
+                      TextSpan(
+                        text: "Touch",
+                        style: TextStyle(color: kprimaryColor),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
+                const Text(
+                  "Feel free to reach out for collaborations, questions, or project inquiries.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white60,
+                    fontSize: 15,
+                  ),
+                ),
+                const SizedBox(height: 50),
+
+                // Contact Elements Grid / Wrap
+                Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 1100),
+                    child: Wrap(
+                      spacing: 24,
+                      runSpacing: 24,
+                      alignment: WrapAlignment.center,
+                      children: [
+                        ContactElemet(
+                          onTap: () => allProvider.linkedIn(),
+                          title: 'LinkedIn',
+                          subtitle: '/in/mohamed-ramadan512',
+                          icon: FontAwesomeIcons.linkedinIn,
+                        ),
+                        ContactElemet(
+                          onTap: () => allProvider.gitHub(),
+                          title: 'GitHub',
+                          subtitle: '/Muhammed-Ramadan512',
+                          icon: FontAwesomeIcons.github,
+                        ),
+                        ContactElemet(
+                          onTap: () => allProvider.email(),
+                          title: 'Email',
+                          subtitle: 'mohamedRamadan949@gmail.com',
+                          icon: FontAwesomeIcons.envelope,
+                        ),
+                        ContactElemet(
+                          onTap: () => allProvider.phone(),
+                          title: 'Phone',
+                          subtitle: '+20 01013691369',
+                          icon: FontAwesomeIcons.phone,
+                        ),
+                        ContactElemet(
+                          onTap: () => allProvider.fb(),
+                          title: 'Facebook',
+                          subtitle: '/mohmed.ramadan.75',
+                          icon: FontAwesomeIcons.facebookF,
+                        ),
+                        ContactElemet(
+                          onTap: () => allProvider.portfolio(),
+                          title: 'Live Portfolio',
+                          subtitle: 'mr-portofolio.web.app',
+                          icon: FontAwesomeIcons.globe,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-            Text.rich(
-              TextSpan(
-                  style: Theme.of(context).textTheme.headline3.copyWith(
-                      fontWeight: FontWeight.bold, color: Colors.black),
-                  children: [
-                    TextSpan(
-                        text: "Get In ", style: TextStyle(color: Colors.amber)),
-                    TextSpan(
-                        text: "Touch", style: TextStyle(color: kprimaryColor))
-                  ]),
+          ),
+
+          const SizedBox(height: 20),
+
+          // Footer
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 24),
+            decoration: BoxDecoration(
+              color: const Color(0xff06080e),
+              border: Border(
+                top: BorderSide(
+                  color: Colors.white.withValues(alpha: 0.06),
+                ),
+              ),
             ),
-            SizedBox(
-              height: 100,
-            ),
-            Center(
+            child: Center(
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  ContactElemet(
-                    onTap: () {
-                      allProvider.linkedIn();
-                    },
-                    title: 'Linkedin',
-                    icon: FontAwesomeIcons.linkedinIn,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text(
+                    'Built with Flutter & ',
+                    style: TextStyle(color: Colors.white70, fontSize: 14),
                   ),
-                  ContactElemet(
-                    onTap: () {
-                      allProvider.fb();
-                    },
-                    title: 'FaceBook',
-                    icon: FontAwesomeIcons.facebookF,
+                  Icon(
+                    Icons.favorite,
+                    color: Colors.redAccent,
+                    size: 16,
                   ),
-                  ContactElemet(
-                    onTap: () {},
-                    title: 'mohamedramadan949@gmail.com',
-                    icon: FontAwesomeIcons.mailBulk,
+                  Text(
+                    ' by ',
+                    style: TextStyle(color: Colors.white70, fontSize: 14),
                   ),
-                  ContactElemet(
-                    onTap: () {
-                      allProvider.insat();
-                    },
-                    title: 'Instagram',
-                    icon: FontAwesomeIcons.instagram,
-                  ),
-                  ContactElemet(
-                    onTap: () {},
-                    title: '+2 01013691369',
-                    icon: FontAwesomeIcons.phoneAlt,
-                  ),
-                  ContactElemet(
-                    onTap: () {
-                      allProvider.gitHub();
-                    },
-                    title: 'Github',
-                    icon: FontAwesomeIcons.github,
+                  Text(
+                    'Mohamed Ramadan',
+                    style: TextStyle(
+                      color: kprimaryColor,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: "Zona",
+                      letterSpacing: 1,
+                      fontSize: 14,
+                    ),
                   ),
                 ],
               ),
             ),
-            SizedBox(
-              height: 150,
-            ),
-            Container(
-              width: double.infinity,
-              height: 150,
-              color: Colors.black38,
-              child: Center(
-                child:
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Text(
-                    'Made With ',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  Icon(
-                    Icons.favorite,
-                    color: Colors.red,
-                  ),
-                  Text(
-                    ' By',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  Text(
-                    ' Mohamed Ramadan',
-                    style: TextStyle(
-                        color: kprimaryColor,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: "Beautiful",
-                        letterSpacing: 2),
-                  ),
-                ]),
-              ),
-            )
-          ],
-        ),
-      )
-    ]);
+          )
+        ],
+      ),
+    );
   }
 }
 
 class ContactElemet extends StatefulWidget {
-  ContactElemet({this.icon, this.title, this.onTap});
+  const ContactElemet({
+    Key? key,
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+  }) : super(key: key);
+
   final IconData icon;
   final String title;
-  final Function onTap;
+  final String subtitle;
+  final VoidCallback onTap;
 
   @override
-  _ContactElemetState createState() => _ContactElemetState();
+  State<ContactElemet> createState() => _ContactElemetState();
 }
 
 class _ContactElemetState extends State<ContactElemet> {
-  Color hoverIconColor = Colors.amber;
-  Color hoverTextColor = kprimaryColor;
-  bool ishover = false;
+  bool _isHovered = false;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: InkWell(
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
         onTap: widget.onTap,
-        splashColor: Colors.transparent,
-        hoverColor: Colors.transparent,
-        highlightColor: Colors.transparent,
-        onHover: (x) {
-          if (x) {
-            setState(() {
-              ishover = true;
-            });
-          } else {
-            setState(() {
-              ishover = false;
-            });
-          }
-        },
-        child: Column(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                  color:
-                      ishover ? hoverIconColor : Colors.black.withOpacity(.5),
-                  shape: BoxShape.circle),
-              padding: EdgeInsets.all(12),
-              child: Icon(
-                widget.icon,
-                color: ishover ? Colors.black : Colors.white,
-              ),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 220),
+          width: 220,
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+          decoration: BoxDecoration(
+            color:
+                _isHovered ? const Color(0xff1c273c) : const Color(0xff161f30),
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(
+              color: _isHovered
+                  ? kprimaryColor
+                  : Colors.white.withValues(alpha: 0.08),
+              width: _isHovered ? 1.5 : 1,
             ),
-            SizedBox(
-              height: 15,
-            ),
-            Text(
-              widget.title, textAlign: TextAlign.center, //,
-              style: TextStyle(
-                color: ishover ? hoverTextColor : Colors.white70,
+            boxShadow: _isHovered
+                ? [
+                    BoxShadow(
+                      color: kprimaryColor.withValues(alpha: 0.25),
+                      blurRadius: 16,
+                      offset: const Offset(0, 6),
+                    ),
+                  ]
+                : [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.3),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+          ),
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: _isHovered
+                      ? Colors.amber
+                      : Colors.white.withValues(alpha: 0.06),
+                ),
+                child: Icon(
+                  widget.icon,
+                  color: _isHovered ? Colors.black : Colors.white,
+                  size: 22,
+                ),
               ),
-            )
-          ],
+              const SizedBox(height: 14),
+              Text(
+                widget.title,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: _isHovered ? Colors.amber : Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                widget.subtitle,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  color: Colors.white60,
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
