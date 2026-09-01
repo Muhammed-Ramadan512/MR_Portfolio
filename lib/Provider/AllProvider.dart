@@ -166,6 +166,6 @@ class AllProvider extends ChangeNotifier {
 
   void downloadCv() {
     _launch(
-        "https://drive.google.com/uc?id=1a6oT4U_Xvt0RmaOtbtFW7xqg6k9rCi3r&export=download");
+        "https://raw.githubusercontent.com/Muhammed-Ramadan512/MR_Portfolio/main/web/MR-CV.pdf");
   }
 }
